@@ -79,3 +79,4 @@ class Indirim(IndirimInterface):
         toplam_fiyat = toplam_fiyat * self._oran()
         toplam_fiyat = self._son_islem(toplam_fiyat)
         return toplam_fiyat
+
