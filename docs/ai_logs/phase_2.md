@@ -8,3 +8,6 @@ Neden? Şu an Indirim sınıfı tek bir indirim tipi uyguluyor. Birden fazla ind
 Fark:
 Ben burda composite yerine decorater kullandım çünkü:
 Mevcut sistem katmanlı bir hiyerarşi (Composite) yapısına sahip değildir, çünkü nesneler arasında parça-bütün ilişkisi olan bir ağaç yapısı bulunmamaktadır. Bu yüzden veri tek bir yapı içinde tutulup sırayla işlendiği için pipeline yaklaşımı benimsenmiş ve bu akışa daha uygun olan Decorator ve benzeri davranış genişletme yapıları tercih edilmiştir.
+
+#review
+Facade ile karmaşık indirim işlemlerini tek bir sınıfta toplayarak sistemi daha sade, okunabilir ve kolay kullanılabilir hale getirdim. Decorator ile ise mevcut indirim yapısını değiştirmeden indirimlere KDV gibi yeni bir özellik dinamik olarak ekledim.
