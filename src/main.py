@@ -1,27 +1,56 @@
+
+class YazIndirimi:
+    def uygula(self, toplam):
+        return toplam * 0.8
+
+class VipMusteri:
+    def uygula(self, toplam):
+        return toplam * 0.5
+
+class PersonelIndirimi:
+    def uygula(self, toplam, personel_id=None):
+        if personel_id is None:
+            raise ValueError("Personel indirimi için personel_id zorunludur!")
+        return toplam * 0.7
+
+
+class Indirim:
+    _kayitli_indirimler = {
+        "YAZ_INDIRIMI": YazIndirimi,
+        "VIP_MUSTERI": VipMusteri,
+        "PERSONEL": PersonelIndirimi,
+    }
+
+    @staticmethod
+    def olustur(indirim_tipi: str, personel_id=None):
+        sinif = Indirim._kayitli_indirimler.get(indirim_tipi)
+
+        if sinif is None:
+            raise ValueError(f"Bilinmeyen indirim tipi: {indirim_tipi}")
+
+        if indirim_tipi == "PERSONEL":
+            return sinif(personel_id)
+
+        return sinif()
+
 class Sepet:
+    KDV_ORANI = 1.18
+
     def __init__(self, urunler):
         self.urunler = urunler
 
     def toplam_hesapla(self, indirim_tipi, personel_id=None, kdv=False):
-        toplam = 0
+        toplam = sum(urun.fiyat for urun in self.urunler)
 
-        for urun in self.urunler:
-            toplam += urun.fiyat
+        indirim = Indirim.olustur(indirim_tipi)
 
-        if indirim_tipi == "YAZ_INDIRIMI":
-            toplam *= 0.8
+        if isinstance(indirim, PersonelIndirimi):
+            toplam = indirim.uygula(toplam, personel_id)
+        else:
+            toplam = indirim.uygula(toplam)
 
-        elif indirim_tipi == "VIP_MUSTERI":
-            toplam *= 0.5
+        return toplam * self.KDV_ORANI if kdv else toplam
 
-        elif indirim_tipi == "PERSONEL":
-            if personel_id is not None:
-                toplam *= 0.7
-            else:
-                print("Hata: Personel ID yok!")
-        if kdv:
-            toplam *= 1.18
-
-        return toplam
     def veritabanina_kaydet(self):
         print("Veritabanına bağlanılıyor ve kaydediliyor...")
+
